@@ -5,9 +5,12 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 import { Provider } from "react-redux";
-import store from "@/store/store";
+import store from "./../store/store";
+import {persistor} from "./../store/store"
+import { PersistGate } from "redux-persist/lib/integration/react";
 
 export default function App({ Component, pageProps }) {
+    
     return (
         <>
             <Head>
@@ -33,9 +36,11 @@ export default function App({ Component, pageProps }) {
                 />
             </Head>
             <Provider store={store}>
-                <Header />
-                <Component {...pageProps} />
-                <Footer />
+                <PersistGate loading={<div>A</div>} persistor={persistor}>
+                    <Header />
+                    <Component {...pageProps} />
+                    <Footer />
+                </PersistGate>
             </Provider>
         </>
     );

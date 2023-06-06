@@ -265,26 +265,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:^1.16.5":
-  version: 1.16.5
-  resolution: "@stripe/react-stripe-js@npm:1.16.5"
-  dependencies:
-    prop-types: ^15.7.2
-  peerDependencies:
-    "@stripe/stripe-js": ^1.44.1
-    react: ^16.8.0 || ^17.0.0 || ^18.0.0
-    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
-  checksum: fc43248af6fd1f9825463eeb23183b586635048e544c7fa076ee59e85439e7864afaca4adee2a62a9d1cf9a72ce7eaf405dbeffec9ff34e6e0464be0cc92c6a8
-  languageName: node
-  linkType: hard
-
-"@stripe/stripe-js@npm:^1.48.0":
-  version: 1.49.0
-  resolution: "@stripe/stripe-js@npm:1.49.0"
-  checksum: d0dff5cb80052f40fb997501e303389b4267b440035eb1c9837fa754c37e202b1c36c1f53c4d67bc14e1a86de677dedb4fe2a7985d8a03d8bbc4994c45574d97
-  languageName: node
-  linkType: hard
-
 "@swc/helpers@npm:0.4.14":
   version: 0.4.14
   resolution: "@swc/helpers@npm:0.4.14"
@@ -1711,33 +1691,6 @@ __metadata:
   checksum: 8c76a6e21dedea87109d6171a0ac77afa14205794a565d71cb10d2925f629a3922da61bf45ea52dbc30bce4d8636dc0a27213a88cbd600eab047d82f9a3a94c5
   languageName: node
   linkType: hard
-
-"frontend@workspace:.":
-  version: 0.0.0-use.local
-  resolution: "frontend@workspace:."
-  dependencies:
-    "@next/font": 13.1.6
-    "@reduxjs/toolkit": ^1.9.3
-    "@stripe/react-stripe-js": ^1.16.5
-    "@stripe/stripe-js": ^1.48.0
-    autoprefixer: ^10.4.14
-    eslint: 8.34.0
-    eslint-config-next: 13.1.6
-    next: 13.1.6
-    postcss: ^8.4.21
-    react: 18.2.0
-    react-dom: 18.2.0
-    react-icons: ^4.7.1
-    react-markdown: ^8.0.5
-    react-multi-carousel: ^2.8.2
-    react-redux: ^8.0.5
-    react-responsive-carousel: ^3.2.23
-    react-toastify: ^9.1.1
-    swr: ^2.1.0
-    tailwindcss: ^3.2.7
-    uuid: ^9.0.0
-  languageName: unknown
-  linkType: soft
 
 "fs-minipass@npm:^2.0.0, fs-minipass@npm:^2.1.0":
   version: 2.1.0
@@ -3572,7 +3525,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.0.0, prop-types@npm:^15.5.8, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.0.0, prop-types@npm:^15.5.8, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -3781,6 +3734,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"redux-persist@npm:^6.0.0":
+  version: 6.0.0
+  resolution: "redux-persist@npm:6.0.0"
+  peerDependencies:
+    redux: ">4.0.0"
+  checksum: edaf10dbf17351ce8058d0802357adae8665b3a1ff39371834e37838ddbe1a79cccbc717b8ba54acb5307651ccf51d0f7dc1cbc8dbae0726ff952d11ef61c6b8
+  languageName: node
+  linkType: hard
+
 "redux-thunk@npm:^2.4.2":
   version: 2.4.2
   resolution: "redux-thunk@npm:2.4.2"
@@ -3790,7 +3752,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"redux@npm:^4.2.0":
+"redux@npm:^4.2.0, redux@npm:^4.2.1":
   version: 4.2.1
   resolution: "redux@npm:4.2.1"
   dependencies:
@@ -4634,6 +4596,33 @@ __metadata:
   checksum: 642cce703afc186dbe7cabf698dc954c70146e853491086f5da39e1ce850676fc96b169fcf7898aa3ff245e9313aeec40da93acd1e1fcc0c146dc4f6308b4ef9
   languageName: node
   linkType: hard
+
+"web-shop@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "web-shop@workspace:."
+  dependencies:
+    "@next/font": 13.1.6
+    "@reduxjs/toolkit": ^1.9.3
+    autoprefixer: ^10.4.14
+    eslint: 8.34.0
+    eslint-config-next: 13.1.6
+    next: 13.1.6
+    postcss: ^8.4.21
+    react: 18.2.0
+    react-dom: 18.2.0
+    react-icons: ^4.7.1
+    react-markdown: ^8.0.5
+    react-multi-carousel: ^2.8.2
+    react-redux: ^8.0.5
+    react-responsive-carousel: ^3.2.23
+    react-toastify: ^9.1.1
+    redux: ^4.2.1
+    redux-persist: ^6.0.0
+    swr: ^2.1.0
+    tailwindcss: ^3.2.7
+    uuid: ^9.0.0
+  languageName: unknown
+  linkType: soft
 
 "which-boxed-primitive@npm:^1.0.2":
   version: 1.0.2
