@@ -5,10 +5,7 @@ import {
   getFirestore, 
   collection, 
   addDoc, 
-  serverTimestamp, 
-  getDocs, 
   updateDoc, 
-  DocumentData
 } from "firebase/firestore";
 import { 
   getDownloadURL, 
@@ -22,12 +19,12 @@ import {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyA3kMjMVPdf3wJFZZeNzraUWCxLibvW3_k",
-  authDomain: "store-check-f2ae3.firebaseapp.com",
-  projectId: "store-check-f2ae3",
-  storageBucket: "store-check-f2ae3.appspot.com",
-  messagingSenderId: "516864499797",
-  appId: "1:516864499797:web:2638edeedbc4bb2db2f4dc"
+  apiKey: process.env.NEXT_PUBLIC_API_KEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTH_DOMAIN,
+  projectId: process.env.NEXT_PUBLIC_PROJECT_ID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGE_BUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGING_SENDER_ID,
+  appId: process.env.NEXT_PUBLIC_APP_ID,
 };
 
 const app = initializeApp(firebaseConfig);
