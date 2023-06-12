@@ -7,7 +7,6 @@ import { useSelector } from "react-redux";
 import PaymentForm from "@/components/PaymentForm";
 
 const Cart = () => {
-    const [loading, setLoading] = useState(false);
     const { cartItems } = useSelector((state) => state.cart);
     const [formMenu, setFormMenu] = useState(true)
 
@@ -20,7 +19,6 @@ const Cart = () => {
 
       useEffect(() => {
         setFormMenu(true);
-        console.log(formMenu) 
     }, []);
 
     return (
@@ -68,14 +66,13 @@ const Cart = () => {
 
                                 <button
                                     className="w-full py-4 rounded-full bg-black text-white text-lg font-medium transition-transform active:scale-95 mb-3 hover:opacity-75 flex items-center gap-2 justify-center"
-                                    onClick={() => { setFormMenu(!formMenu) 
-                                        console.log(formMenu)}}
+                                    onClick={() => { setFormMenu(!formMenu) }}
                                 >
                                     Checkout
                                 </button>
                             </div>
                             ) : (
-                                <PaymentForm subTotal={subTotal} />
+                                <PaymentForm subTotal={subTotal} cartItems={cartItems}/>
                             )};
                         </div>
                     </>

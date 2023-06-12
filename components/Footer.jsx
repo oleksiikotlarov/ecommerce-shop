@@ -109,6 +109,11 @@ const Footer = () => {
                     <div className="text-[12px] text-white/[0.5] hover:text-white cursor-pointer">
                         Privacy Policy
                     </div>
+                    <Link href='/admin'>
+                    <div className="text-[12px] text-white/[0.5] hover:text-white cursor-pointer">
+                        Admin
+                    </div>
+                    </Link>
                 </div>
             </Wrapper>
         </footer>

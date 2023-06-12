@@ -10,7 +10,6 @@ import {persistor} from "./../store/store"
 import { PersistGate } from "redux-persist/lib/integration/react";
 
 export default function App({ Component, pageProps }) {
-    
     return (
         <>
             <Head>

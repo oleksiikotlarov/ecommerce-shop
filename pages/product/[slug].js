@@ -8,13 +8,14 @@ import ReactMarkdown from "react-markdown";
 import { useDispatch } from "react-redux";
 import { addToCart } from "@/store/cartSlice";
 import { v4 as uuidv4 } from "uuid";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "./../../config/fire"
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { items } from "../items";
-import { sizes } from "../items";
 
-const ProductDetails = ({ product, products }) => {
+
+const ProductDetails = ({ product, products, sizes }) => {
     const [selectedSize, setSelectedSize] = useState("");
     const [showError, setShowError] = useState(false);
     const dispatch = useDispatch();
@@ -168,7 +169,8 @@ const ProductDetails = ({ product, products }) => {
 export default ProductDetails;
 
 export async function getStaticPaths() {
-    const products = items
+    const productsSnapshot = await getDocs(collection(db, "products"));
+    const products = productsSnapshot.docs.map((doc) => doc.data());
 
       const paths = products.map((p) => ({
         params: {
@@ -178,20 +180,29 @@ export async function getStaticPaths() {
 
     return {
         paths,
-        fallback: false,
+        fallback: 'blocking',
     };
 }
 
 export async function getStaticProps({ params: { slug } }) {
-    const products = items;
+    const productsSnapshot = await getDocs(collection(db, "products"));
+    const products = productsSnapshot.docs.map((doc) => doc.data());
 
+    // Find the product matching the slug
     const product = products.find((p) => p.attributes.slug === slug);
+
+    // Filter out the product with the matching slug
     const filteredProducts = products.filter((p) => p.attributes.slug !== slug);
+
+    // Retrieve sizes from the "sizes" collection
+    const sizesSnapshot = await getDocs(collection(db, "sizes"));
+    const sizes = sizesSnapshot.docs.map((doc) => doc.data().size);
 
     return {
         props: {
             product,
             products: filteredProducts,
+            sizes
         },
     };
 }

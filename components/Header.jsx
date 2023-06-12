@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
 import Wrapper from "./Wrapper";
+import { useSelector } from 'react-redux';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from './../config/fire';
+import { useRouter } from 'next/router';
 
 import Link from "next/link";
 import Menu from "./Menu";
@@ -9,7 +13,6 @@ import { IoMdHeartEmpty } from "react-icons/io";
 import { BsCart } from "react-icons/bs";
 import { BiMenuAltRight } from "react-icons/bi";
 import { VscChromeClose } from "react-icons/vsc";
-import { useSelector } from "react-redux";
 
 const Header = () => {
     const [mobileMenu, setMobileMenu] = useState(false);
@@ -18,6 +21,34 @@ const Header = () => {
     const [lastScrollY, setLastScrollY] = useState(0);
 
     const { cartItems } = useSelector((state) => state.cart);
+    
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    const router = useRouter();
+
+    useEffect(()=>{
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                
+                setIsLoggedIn(true);
+            } else {
+                // User is signed out
+                setIsLoggedIn(false);
+            }
+        });
+         
+    }, [])
+
+    const handleSignOut = async () => {
+        try {
+            await signOut(auth);
+            console.log("User logged out");
+            // router.push('/'); 
+        } catch (error) {
+            console.log("Error signing out:", error);
+        }
+    };
 
     const controlNavbar = () => {
         if (window.scrollY > 200) {
@@ -103,6 +134,23 @@ const Header = () => {
                             />
                         )}
                     </div>
+
+                    {isLoggedIn && (
+                    <>
+                        <Link href="/admin">
+                            <div className="px-2 py-1 text-sm font-medium text-black hover:text-gray-900 cursor-pointer">
+                                Dashboard
+                            </div>
+                        </Link>
+                        <div
+                            className="px-2 py-1 text-sm font-medium text-black hover:text-gray-900 cursor-pointer"
+                            onClick={handleSignOut}
+                        >
+                            Logout
+                        </div>
+                    </>
+                    )}
+
                 </div>
             </Wrapper>
         </header>

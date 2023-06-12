@@ -1,7 +1,8 @@
 import HeroBanner from "@/components/HeroBanner";
 import ProductCard from "@/components/ProductCard";
 import Wrapper from "@/components/Wrapper";
-import { items } from "./items";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "./../config/fire";
 
 export default function Home({ products }) {
     return (
@@ -29,9 +30,10 @@ export default function Home({ products }) {
     );
 }
 
-export async function getStaticProps() {
-    const products = items
-
+export async function getServerSideProps() {
+    const productsSnapshot = await getDocs(collection(db, "products"));
+    const products = productsSnapshot.docs.map((doc) => doc.data());
+    
     return {
         props: { products },
     };
