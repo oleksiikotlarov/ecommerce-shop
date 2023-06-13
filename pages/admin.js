@@ -14,7 +14,7 @@ import {
   doc,
   deleteDoc,
   query,
-  getDocs
+  getDocs,
 } from "firebase/firestore";
 import Order from "@/components/Order";
 import EditProduct from "@/components/EditProduct";
@@ -52,7 +52,6 @@ const Admin = ({ products, orders }) => {
         }))
       );
     });
-    
   }, [sizeInput]);
 
   const addSize = () => {
@@ -87,7 +86,26 @@ const Admin = ({ products, orders }) => {
               {toggleMenu ? (
                 <div>
                   <div className="text-4xl font-bold">Orders</div>
-                  <div>{orders.map((order) => (<Order key={order.id} data={order}/>))}</div>
+                  {orders.length > 0 && (
+                    <div>
+                      {orders.map((order) => (
+                        <Order key={order.id} data={order} />
+                      ))}
+                    </div>
+                  )}
+                  {orders.length < 1 && (
+                    <div className="flex-[2] flex flex-col items-center pb-[50px] md:-mt-14 bg-white rounded-xl text-black">
+                      <Image
+                        src="/empty-cart.jpg"
+                        width={300}
+                        height={300}
+                        className="w-[300px] md:w-[400px] "
+                      />
+                      <span className="text-2xl font-bold mt-4">
+                        No orders yet
+                      </span>
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div>
@@ -120,7 +138,7 @@ const Admin = ({ products, orders }) => {
                     </div>
                   </div>
                   {toggleAdd ? (
-                    <ProductUpload sizes={localSizes}/>
+                    <ProductUpload sizes={localSizes} />
                   ) : (
                     <div>
                       <form>
@@ -176,7 +194,9 @@ const Admin = ({ products, orders }) => {
                         </div>
                       </form>
                       <div>
-                        {products.map((product) => (<EditProduct key={product.id} product={product}/>))}
+                        {products.map((product) => (
+                          <EditProduct key={product.id} product={product} />
+                        ))}
                       </div>
                     </div>
                   )}
@@ -202,9 +222,9 @@ export async function getStaticProps() {
 
   const productsSnapshot = await getDocs(collection(db, "products"));
   const products = productsSnapshot.docs.map((doc) => doc.data());
-  
+
   return {
-      props: { products, orders },
-      revalidate: 10,
+    props: { products, orders },
+    revalidate: 10,
   };
 }

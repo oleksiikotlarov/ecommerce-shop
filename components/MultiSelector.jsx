@@ -14,7 +14,7 @@ const MultiSelector = ({ options, selectedOptions, onChange }) => {
       {options.map((option) => (
         <label
           key={option}
-          className="bg-gray-200 mx-4 p-3 rounded-xl text-lg inline-flex items-center space-x-2 cursor-pointer"
+          className="bg-gray-200 mx-4 p-3 my-2 rounded-xl text-lg inline-flex items-center space-x-2 cursor-pointer"
         >
           <input
             type="checkbox"

@@ -11,16 +11,12 @@ const Cart = () => {
     const [formMenu, setFormMenu] = useState(true)
 
     const subTotal = useMemo(() => {
-        return cartItems.reduce(
-          (total, item) => total + (item.price || 0),
-          0
-        );
+        return cartItems.reduce((total, item) => {
+          const itemPrice = parseFloat(item.price) || 0;
+          return total + itemPrice;
+        }, 0);
       }, [cartItems]);
-
-      useEffect(() => {
-        setFormMenu(true);
-    }, []);
-
+    
     return (
         <div className="w-full md:py-20">
             <Wrapper>

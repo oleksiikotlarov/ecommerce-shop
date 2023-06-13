@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { addDoc, updateDoc, collection } from "firebase/firestore";
 import {db} from "./../config/fire"
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
 import { resetCart } from "./../store/cartSlice";
 import { useDispatch } from "react-redux";
+import { useRouter } from "next/router";
 
 const uploadOrder = async (formFields, cartItems, subTotal) => {
   try {
@@ -72,8 +71,8 @@ const PaymentForm = ({ subTotal, cartItems }) => {
     if (res) {
       setDisabled(false);
       setFormFields(defaultInputs);
-      notify()
       dispatch(resetCart());
+      router.push("/success"); 
     }
   };
 
@@ -82,24 +81,9 @@ const PaymentForm = ({ subTotal, cartItems }) => {
     setFormFields({ ...formFields, [name]: value });
   };
 
-  const notify = () => {
-    toast.success("Success, order submited", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-    });
-};
-
   return (
     <div className="flex-[1]">
-      <ToastContainer />
       <div className="text-lg font-bold">Summary</div>
-
       <form onSubmit={handleSubmit}>
         <div className="p-5 my-5 bg-black/[0.05] rounded-xl">
           <div className="flex justify-between">
@@ -120,7 +104,6 @@ const PaymentForm = ({ subTotal, cartItems }) => {
               Your details
             </div>
           </div>
-
           <div className="text-sm md:text-md py-5 border-t mt-5">
             <div className="grid md:grid-cols-2 md:gap-6">
               <div className="relative z-0 w-full mb-6 group">

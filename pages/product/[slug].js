@@ -39,31 +39,31 @@ const ProductDetails = ({ product, products, sizes }) => {
             <Wrapper>
                 <div className="flex flex-col lg:flex-row md:px-10 gap-[50px] lg:gap-[100px]">
                     <div className="w-full md:w-auto flex-[1.5] max-w-[500px] lg:max-w-full mx-auto lg:mx-0">
-                        <ProductDetailsCarousel images={product.attributes.images}/>
+                        <ProductDetailsCarousel images={product?.attributes?.images}/>
                     </div>
 
                     <div className="flex-[1] py-3">
                         <div className="text-[34px] font-semibold mb-2 leading-tight">
-                        {product.attributes.name}
+                        {product?.attributes?.name}
                         </div>
 
                         <div className="text-lg font-semibold mb-5">
-                        {product.attributes.subtitle}
+                        {product?.attributes?.subtitle}
                         </div>
 
                         <div className="flex items-center">
                             <p className="mr-2 text-lg font-semibold">
-                                Price : ${product.attributes.price}
+                                Price : ${product?.attributes?.price}
                             </p>
-                            {product.attributes.original_price && (
+                            {product?.attributes?.original_price && (
                                 <>
                                     <p className="text-base  font-medium line-through">
-                                        ${product.attributes.original_price}
+                                        ${product?.attributes?.original_price}
                                     </p>
                                     <p className="ml-auto text-base font-medium text-green-500">
                                         {getDiscountedPricePercentage(
-                                            product.attributes.original_price,
-                                            product.attributes.price
+                                            product?.attributes?.original_price,
+                                            product?.attributes?.price
                                         )}
                                         % off
                                     </p>
@@ -93,7 +93,7 @@ const ProductDetails = ({ product, products, sizes }) => {
                                 <div
                                 key={i}
                                 className={`border rounded-md text-center py-3 font-medium ${
-                                    product.attributes.sizes.includes(item) ? "hover:border-black cursor-pointer" : "cursor-not-allowed bg-black/[0.1] opacity-50"
+                                    product?.attributes?.sizes.includes(item) ? "hover:border-black cursor-pointer" : "cursor-not-allowed bg-black/[0.1] opacity-50"
                                 } ${
                                     selectedSize === item ? "border-black" : ""
                                 }`}

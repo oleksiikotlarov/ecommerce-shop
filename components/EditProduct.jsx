@@ -23,8 +23,6 @@ export default function EditProduct({ product }) {
     });
   }, [product.id]);
 
-  console.log(formFields);
-
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormFields((prevFields) => ({
@@ -56,7 +54,7 @@ export default function EditProduct({ product }) {
         },
       });
       console.log("Product updated successfully!");
-      router.push("/admin"); 
+      router.push("/admin");
     } catch (error) {
       console.error("Error updating product:", error);
     }
@@ -76,45 +74,53 @@ export default function EditProduct({ product }) {
         height={200}
       />
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-2">
-          <div className="flex p-2 m-2 rounded-lg bg-gray-200">
-            <label className="p-2 text-lg">Name:</label>
+        <div className="grid md:grid-cols-2 md:gap-6 text-sm md:text-md py-5 border-t mt-5">
+          <div className="relative z-0 w-full mb-6 group mt-4">
             <input
-              className="text-black ml-2 w-full p-2"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
               type="text"
               name="name"
               value={formFields.name}
               onChange={handleInputChange}
             />
+            <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              Name:
+            </label>
           </div>
-          <div className="flex p-2 m-2 rounded-lg bg-gray-200">
-            <label className="p-2 text-lg">Price:</label>
+          <div className="relative z-0 w-full mb-6 group mt-4">
             <input
-              className="text-black ml-2 w-full p-2"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
               type="text"
               name="price"
               value={formFields.price}
               onChange={handleInputChange}
             />
+            <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+            Price:
+            </label>
           </div>
-          <div className="flex items-center p-2 m-2 rounded-lg bg-gray-200">
-            <label className="p-2 text-lg">Subtitle:</label>
+          <div className="relative z-0 w-full mb-6 group mt-4">
             <input
-              className="text-black ml-2 w-full p-2"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
               type="text"
               name="subtitle"
               value={formFields.subtitle}
               onChange={handleInputChange}
             />
+            <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+            Subtitle:
+            </label>
           </div>
-          <div className="flex items-center p-2 m-2 rounded-lg bg-gray-200">
-            <label className="p-2 text-lg">Description:</label>
+          <div className="relative z-0 w-full mb-6 group mt-4">
             <textarea
-              className="text-black ml-2 w-full p-2"
+              className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
               name="description"
               value={formFields.description}
               onChange={handleInputChange}
             />
+            <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+            Description:
+            </label>
           </div>
         </div>
         <div className="flex items-center justify-between">
@@ -126,7 +132,7 @@ export default function EditProduct({ product }) {
           <RiDeleteBin6Line
             onClick={() => {
               deleteDoc(doc(db, "products", product.id));
-              router.push("/admin"); 
+              router.push("/admin");
             }}
             className="cursor-pointer text-black/[0.5] hover:text-black text-[20px] md:text-[28px] mx-8 my-2"
           />
