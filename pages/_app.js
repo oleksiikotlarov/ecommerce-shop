@@ -22,7 +22,7 @@ export default function App({ Component, pageProps }) {
                     name="viewport"
                     content="width=device-width, initial-scale=1"
                 />
-                <link rel="icon" href="/public/favicon.ico" />
+                <link rel="icon" href="/images/favicon.ico" />
                 <link rel="preconnect" href="https://fonts.googleapis.com" />
                 <link
                     rel="preconnect"
@@ -35,7 +35,7 @@ export default function App({ Component, pageProps }) {
                 />
             </Head>
             <Provider store={store}>
-                <PersistGate loading={<div>A</div>} persistor={persistor}>
+                <PersistGate loading={<div></div>} persistor={persistor}>
                     <Header />
                     <Component {...pageProps} />
                     <Footer />
