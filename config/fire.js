@@ -32,29 +32,16 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export default app;
 
-const storage = getStorage(app);
+export const storage = getStorage(app);
 export const db = getFirestore(app);
 
 export const uploadProduct = async (
     formFields,
-    file,
-    fileName,
-    selectedOptions
+    selectedOptions,
+    selectedImages,
   ) => {
     try {
       const { name, price, subtitle, description } = formFields;
-      
-      const imageRef = ref(storage, `images/${fileName}`);
-      const uploadImage = await uploadBytes(imageRef, file);
-      
-      const newMetadata = {
-        cacheControl: 'public,max-age=2629800000', 
-        contentType: uploadImage.metadata.contentType
-      };
-      
-      await updateMetadata(imageRef, newMetadata);
-      
-      const publicImageUrl = await getDownloadURL(imageRef)
 
       const productData = {
         id: Date.now(), 
@@ -64,7 +51,7 @@ export const uploadProduct = async (
           thumbnail: {
             data: {
               attributes: {
-                url: publicImageUrl
+                url: selectedImages[0]
               }
             }
           },
@@ -72,7 +59,7 @@ export const uploadProduct = async (
           subtitle: subtitle,
           description: description,
           sizes: selectedOptions, 
-          images: [ "url1", "url2"]
+          images: selectedImages,
         }
       }
       

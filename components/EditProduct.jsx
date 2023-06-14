@@ -2,11 +2,14 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { doc, updateDoc, deleteDoc } from "firebase/firestore";
 import { db } from "../config/fire";
-import Image from "next/image";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import MultiSelector from "./MultiSelector";
+import ImageSelector from "./ImageSelector";
 
-export default function EditProduct({ product }) {
+export default function EditProduct({ product, sizes, images }) {
   const router = useRouter();
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [selectedImages, setSelectedImages] = useState([]);
   const [formFields, setFormFields] = useState({
     name: "",
     price: "",
@@ -14,6 +17,7 @@ export default function EditProduct({ product }) {
     description: "",
   });
 
+  console.log(selectedImages);
   useEffect(() => {
     setFormFields({
       name: product.attributes.name,
@@ -21,6 +25,8 @@ export default function EditProduct({ product }) {
       subtitle: product.attributes.subtitle,
       description: product.attributes.description,
     });
+    setSelectedOptions(product.attributes.sizes);
+    setSelectedImages(product.attributes.images);
   }, [product.id]);
 
   const handleInputChange = (event) => {
@@ -29,6 +35,16 @@ export default function EditProduct({ product }) {
       ...prevFields,
       [name]: value,
     }));
+  };
+
+  const handleSelectionChange = (updatedOptions) => {
+    setSelectedOptions(updatedOptions);
+  };
+  const options = sizes;
+  const imgs = images;
+
+  const handleImageChange = (updatedImages) => {
+    setSelectedImages(updatedImages);
   };
 
   const handleSubmit = async (e) => {
@@ -42,15 +58,15 @@ export default function EditProduct({ product }) {
           thumbnail: {
             data: {
               attributes: {
-                url: product.attributes.thumbnail.data.attributes.url,
+                url: selectedImages[0],
               },
             },
           },
           slug: formFields.name.toLowerCase().replace(/\s/g, "-"),
           subtitle: formFields.subtitle,
           description: formFields.description,
-          sizes: product.attributes.sizes,
-          images: ["url1", "url2"],
+          sizes: selectedOptions,
+          images: selectedImages,
         },
       });
       console.log("Product updated successfully!");
@@ -66,15 +82,8 @@ export default function EditProduct({ product }) {
 
   return (
     <div className="bg-white rounded-lg mt-4 text-black p-4">
-      <Image
-        className="m-4"
-        src={product.attributes.thumbnail.data.attributes.url}
-        alt={product.attributes.name}
-        width={200}
-        height={200}
-      />
       <form onSubmit={handleSubmit}>
-        <div className="grid md:grid-cols-2 md:gap-6 text-sm md:text-md py-5 border-t mt-5">
+        <div className="grid md:grid-cols-2 md:gap-6 text-sm md:text-md py-5 mt-5">
           <div className="relative z-0 w-full mb-6 group mt-4">
             <input
               className="block py-2.5 px-0 w-full text-sm text-gray-900 bg-transparent border-b border-gray-300 appearance-none focus:outline-none focus:ring-0 focus:border-black peer"
@@ -96,7 +105,7 @@ export default function EditProduct({ product }) {
               onChange={handleInputChange}
             />
             <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-            Price:
+              Price:
             </label>
           </div>
           <div className="relative z-0 w-full mb-6 group mt-4">
@@ -108,7 +117,7 @@ export default function EditProduct({ product }) {
               onChange={handleInputChange}
             />
             <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-            Subtitle:
+              Subtitle:
             </label>
           </div>
           <div className="relative z-0 w-full mb-6 group mt-4">
@@ -119,9 +128,25 @@ export default function EditProduct({ product }) {
               onChange={handleInputChange}
             />
             <label className="peer-focus:font-medium absolute text-sm text-gray-500 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-black peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-            Description:
+              Description:
             </label>
           </div>
+        </div>
+        <div className="m-2 mt-4">
+          <p>Choose avalible sizes</p>
+          <MultiSelector
+            options={options}
+            selectedOptions={selectedOptions}
+            onChange={handleSelectionChange}
+          />
+        </div>
+        <div className="m-2 mt-4">
+          <p>Choose images</p>
+          <ImageSelector
+            images={imgs}
+            selectedImages={selectedImages}
+            onChange={handleImageChange}
+          />
         </div>
         <div className="flex items-center justify-between">
           <button

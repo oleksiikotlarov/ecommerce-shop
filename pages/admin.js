@@ -6,7 +6,7 @@ import Wrapper from "@/components/Wrapper";
 import Login from "../components/Login";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import ProductUpload from "@/components/ProductUpload";
-import { db } from "./../config/fire";
+import { db, storage } from "./../config/fire";
 import {
   collection,
   onSnapshot,
@@ -16,17 +16,27 @@ import {
   query,
   getDocs,
 } from "firebase/firestore";
+import {
+  ref,
+  uploadBytes,
+  getDownloadURL,
+  updateMetadata,
+  deleteObject,
+} from "firebase/storage";
 import Order from "@/components/Order";
 import EditProduct from "@/components/EditProduct";
 
 const q = query(collection(db, "sizes"));
+const img = query(collection(db, "images"));
 
 const Admin = ({ products, orders }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [toggleMenu, setToggleMenu] = useState(true);
   const [toggleAdd, setToggleAdd] = useState(false);
   const [localSizes, setLocalSizes] = useState([]);
+  const [imageUrls, setImageUrls] = useState([]);
   const [sizeInput, setSizeInput] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {
@@ -59,6 +69,54 @@ const Admin = ({ products, orders }) => {
       size: sizeInput,
     });
     setSizeInput("");
+  };
+
+  useEffect(() => {
+    onSnapshot(img, (snapshot) => {
+      setImageUrls(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          item: doc.data(),
+        }))
+      );
+    });
+  }, [selectedImage]);
+
+  const handleImageUpload = async () => {
+    try {
+      const storageRef = ref(storage, `images/${selectedImage.name}`);
+      const uploadTask = uploadBytes(storageRef, selectedImage);
+
+      const newMetadata = {
+        cacheControl: "public,max-age=2629800000",
+        contentType: selectedImage.type,
+      };
+      await updateMetadata(storageRef, newMetadata);
+
+      const imageUrl = await getDownloadURL(storageRef);
+
+      await addDoc(collection(db, "images"), {
+        url: imageUrl,
+        name: selectedImage.name,
+      });
+
+      console.log("Image upload successful. URL:", imageUrl);
+      URL.revokeObjectURL(selectedImage.preview);
+      setSelectedImage(null);
+    } catch (error) {
+      console.error("Error uploading image:", error);
+    }
+  };
+
+  const handleDeleteImage = async (img) => {
+    try {
+      const imageRef = ref(storage, `images/${img.item.name}`);
+      await deleteObject(imageRef);
+
+      await deleteDoc(doc(db, "images", img.id));
+    } catch (error) {
+      console.error("Error deleting image:", error);
+    }
   };
 
   return (
@@ -138,7 +196,7 @@ const Admin = ({ products, orders }) => {
                     </div>
                   </div>
                   {toggleAdd ? (
-                    <ProductUpload sizes={localSizes} />
+                    <ProductUpload sizes={localSizes} images={imageUrls} />
                   ) : (
                     <div>
                       <form>
@@ -178,7 +236,7 @@ const Admin = ({ products, orders }) => {
                           </div>
                           <div className="flex flex-row flex-wrap justify-start mt-6 items-center">
                             {localSizes.map((item) => (
-                              <div className="flex bg-gray-300 p-8 m-2 rounded-md">
+                              <div className="flex bg-gray-300 p-2 md:p-4 m-2 rounded-md">
                                 <div className="text-lg font-bold mr-4">
                                   {item.item.size}
                                 </div>
@@ -193,9 +251,66 @@ const Admin = ({ products, orders }) => {
                           </div>
                         </div>
                       </form>
+                      <form>
+                        <div className="flex-[1] p-5 mt-10 bg-white text-black rounded-md">
+                          <div className="flex flex-row justify-between items-center">
+                            <div className="text-2xl font-bold">
+                              Edit all avalible images
+                            </div>
+                            <input
+                              className="m-2 rounded-sm border p-2 w-8/12"
+                              type="file"
+                              name="thumbnail"
+                              accept=".png, .jpg, .jpeg"
+                              onChange={(e) =>
+                                setSelectedImage(e.target.files[0])
+                              }
+                              required
+                            />
+                            <div
+                              className="cursor-pointer hover:drop-shadow-lg hover:bg-gray-500 hover:bg-opacity-25 rounded-lg p-2"
+                              onClick={() => {
+                                handleImageUpload();
+                              }}>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="w-6 h-6">
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M12 4.5v15m7.5-7.5h-15"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                          <div className="flex flex-wrap text-white text-[20px] w-full max-w-[1360px] mx-auto sticky top-[50px]">
+                            {imageUrls.map((img, key) => (
+                              <div className="relative m-4">
+                                <Image
+                                  src={img.item.url}
+                                  alt={img.id}
+                                  key={key}
+                                  width={200}
+                                  height={120}
+                                />
+                                <div className="absolute bottom-0 right-0 m-1">
+                                  <RiDeleteBin6Line
+                                    onClick={() => handleDeleteImage(img)}
+                                    className="cursor-pointer text-black/[0.5] hover:text-black text-[20px] md:text-[24px] mt-1"
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </form>
                       <div>
                         {products.map((product) => (
-                          <EditProduct key={product.id} product={product} />
+                          <EditProduct key={product.id} product={product} sizes={localSizes} images={imageUrls} />
                         ))}
                       </div>
                     </div>

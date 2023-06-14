@@ -1,11 +1,13 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { db } from "./../config/fire";
 import { doc, deleteDoc } from "firebase/firestore";
 
 const Order = ({ data }) => {
+  const router = useRouter();
   return (
     <div className="border mt-8 rounded-lg p-8">
       <div className="flex justify-between text-2xl mb-4">
@@ -14,6 +16,7 @@ const Order = ({ data }) => {
           <RiDeleteBin6Line
             onClick={() => {
               deleteDoc(doc(db, "orders", data.id));
+              router.push("/admin");
             }}
             className="cursor-pointer text-white/[0.5] hover:text-white text-[20px] md:text-[24px] mt-1 m-2"
           />
